@@ -27,11 +27,18 @@ class LoadFileTask extends Task<String> {
     @Override
     protected String call() throws Exception {
         try (BufferedReader reader = Files.newBufferedReader(tailingTabbedFile.getFile(), Charset.forName("US-ASCII"))) {
-            char[] chars = new char[100000];
+            char[] chars = new char[tailingTabbedFile.getBuffer()];
+
+            long size = Files.size(tailingTabbedFile.getFile());
+            long skip = size - tailingTabbedFile.getBuffer();
+            skip = skip < 0 ? 0 : skip;
+
+            reader.skip(skip);
+
             int read;
             while ((read = reader.read(chars)) > 0) {
                 String value;
-                if (read < 100000) {
+                if (read < tailingTabbedFile.getBuffer()) {
                     value = String.copyValueOf(chars, 0, read);
                 } else {
                     value = new String(chars);

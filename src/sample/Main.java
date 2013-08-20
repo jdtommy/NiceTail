@@ -19,7 +19,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
         Parent root = (Parent) loader.load();
         controller = loader.getController();
-        primaryStage.setTitle("TailIt");
+        primaryStage.setTitle("NiceTail");
         Scene scene = new Scene(root, 500, 500);
         scene.getStylesheets().add("style/style.css");
         primaryStage.setScene(scene);

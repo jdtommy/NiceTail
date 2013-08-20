@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
@@ -131,9 +132,9 @@ public class TailingTabbedFile implements Runnable {
     @Override
     public void run() {
         if (paused) {
-            System.out.println("*************** paused");
+            System.out.println(new Date() + "*************** paused");
         } else {
-            System.out.println("*************** running");
+            System.out.println(new Date() + "*************** running");
             try (BufferedReader reader = Files.newBufferedReader(file, Charset.forName("US-ASCII"))) {
                 long lastIndex = Files.size(file) - 1;
                 long charsToRead = lastIndex - lastReadIndex;
@@ -167,5 +168,13 @@ public class TailingTabbedFile implements Runnable {
 
     public ScheduledFuture<?> getTask() {
         return task;
+    }
+
+    public int getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(int buffer) {
+        this.buffer = buffer;
     }
 }
