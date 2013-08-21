@@ -35,6 +35,7 @@ class LoadFileTask extends Task<String> {
 
             reader.skip(skip);
 
+
             int read;
             while ((read = reader.read(chars)) > 0) {
                 String value;
