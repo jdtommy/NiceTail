@@ -214,4 +214,7 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
+#mine
 out/
+.idea/
+
