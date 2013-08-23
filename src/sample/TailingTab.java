@@ -3,6 +3,7 @@ package sample;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.ScrollEvent;
@@ -53,7 +54,7 @@ public class TailingTab {
         this.textArea = textArea;
     }
 
-    public void addButton(Button button) {
+    public void addButton(ButtonBase button) {
         buttonArea.getChildren().add(button);
     }
 

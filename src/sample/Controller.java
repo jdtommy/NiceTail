@@ -67,4 +67,8 @@ public class Controller {
         tabList.remove(tailingTabbedFile);
         tailingTabbedFile.getTask().cancel(false);
     }
+
+    public void addListenersToVisibleComponents() {
+
+    }
 }

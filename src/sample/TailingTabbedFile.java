@@ -1,11 +1,11 @@
 package sample;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,7 +43,7 @@ public class TailingTabbedFile implements Runnable {
     }
 
     private void setupTab() {
-        final Button pauseButton = new Button("Pause Tailing");
+        final ToggleButton pauseButton = new ToggleButton("Pause Tailing");
         pauseButton.setMinWidth(110);
         pauseButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -62,8 +62,31 @@ public class TailingTabbedFile implements Runnable {
             }
         });
 
+        Button clearButton = new Button("clear");
+        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent actionEvent) {
+                tab.getTextArea().clear();
+            }
+        });
+
         tab.addButton(pauseButton);
 //        tab.addButton(pauseScrollButton);
+        tab.addButton(clearButton);
+
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                ScrollPane scrollPane = (ScrollPane) tab.getTextArea().lookup(".scroll-pane");
+                scrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                        if (!pauseButton.isSelected()){
+                            paused = observableValue.getValue().doubleValue() != 1;
+                        }
+                    }
+                });
+            }
+        });
+
     }
 
     private void setupFile(String fileName) {
@@ -132,9 +155,7 @@ public class TailingTabbedFile implements Runnable {
     @Override
     public void run() {
         if (paused) {
-            System.out.println(new Date() + "*************** paused");
         } else {
-            System.out.println(new Date() + "*************** running");
             try (BufferedReader reader = Files.newBufferedReader(file, Charset.forName("US-ASCII"))) {
                 long lastIndex = Files.size(file) - 1;
                 long charsToRead = lastIndex - lastReadIndex;
